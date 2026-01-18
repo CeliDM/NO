@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>No.</title>
+
+  <!-- Keep the same font; works well for a “clean editorial” light theme too -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Palette you provided */
+      --bg-base: #CAE4DB;          /* MORNING SKY */
+      --text: #00303F;             /* CERULEAN */
+
+      /* Soft “ink” glow + very thin stroke to avoid fuzziness */
+      --stroke-strong: rgba(0, 48, 63, 0.55);
+      --stroke-soft: rgba(0, 48, 63, 0.40);
+
+      /* Background tint layers derived from the cerulean */
+      --glow-1: rgba(0, 48, 63, 0.10);
+      --glow-2: rgba(0, 48, 63, 0.06);
+
+      --muted: rgba(0, 48, 63, 0.55);
+
+      /* Responsive vertical rhythm */
+      --space-1: clamp(14px, 1.1vw + 6px, 26px);
+    }
+
+    html, body { height: 100%; }
+
+    body{
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 60% 35%, var(--glow-1), transparent 62%),
+        radial-gradient(760px 440px at 40% 70%, var(--glow-2), transparent 64%),
+        linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.00) 38%),
+        var(--bg-base);
+      display: grid;
+      place-items: center;
+      text-rendering: optimizeLegibility;
+    }
+
+    main{
+      text-align: center;
+      max-width: 900px;
+      padding: 24px;
+      /* Much subtler than the dark version */
+      filter: drop-shadow(0 0 10px rgba(0,48,63,0.08));
+    }
+
+    /* Primary content — the reason */
+    .reason{
+      margin: 0 0 var(--space-1) 0;
+      font-size: clamp(28px, 2.5vw, 38px);
+      line-height: 1.32;
+      white-space: pre-wrap;
+      font-weight: 500;
+      min-height: 2.7em;
+
+      /* Thin outline to keep edges crisp */
+      -webkit-text-stroke: 0.35px var(--stroke-soft);
+      text-shadow:
+        0 0 3px rgba(0,48,63,0.16),
+        0 0 10px rgba(0,48,63,0.08);
+    }
+
+    /* Secondary tag line */
+    h1{
+      margin: 0;
+      font-size: clamp(20px, 3vw, 30px);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      opacity: 0.85;
+
+      -webkit-text-stroke: 0.4px var(--stroke-strong);
+      text-shadow:
+        0 0 2px rgba(0,48,63,0.14),
+        0 0 8px rgba(0,48,63,0.07);
+    }
+
+    .meta{
+      position: fixed;
+      right: 18px;
+      bottom: 14px;
+      font-size: 11px;
+      color: var(--muted);
+      user-select: none;
+      letter-spacing: 0.04em;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      main{ filter: none; }
+      h1, .reason{ text-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main aria-live="polite">
+    <div class="reason" id="reason">Loading…</div>
+
+    <!-- decorative, so hide from screen readers -->
+    <h1 aria-hidden="true">(it's a no)</h1>
+  </main>
+
+  <div class="meta">Powered by No-as-a-Service</div>
+
+  <script>
+    (async () => {
+      const el = document.getElementById("reason");
+      try {
+        const r = await fetch("https://naas.isalman.dev/no");
+        const d = await r.json();
+        el.textContent = d?.reason || "No.";
+      } catch {
+        el.te
