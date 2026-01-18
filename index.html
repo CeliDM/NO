@@ -4,81 +4,85 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>No.</title>
+
+  <!-- Modern serif closer to reference site -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg: #070607;        /* near-black */
-      --text: #ff6a1a;      /* orange hue */
-      --muted: rgba(255,106,26,0.55);
+      --bg-base: #060506;
+      --glow-1: rgba(255,60,20,0.20);
+      --glow-2: rgba(255,90,30,0.12);
+      --text: #ff3b1a;           /* reddish neon orange */
+      --muted: rgba(255,120,80,0.55);
     }
 
     html, body { height: 100%; }
 
     body{
       margin: 0;
-      background: var(--bg);
+      font-family: "Playfair Display", Georgia, serif;
       color: var(--text);
-      font-family: "Times New Roman", Times, serif;
+      background:
+        radial-gradient(900px 500px at 60% 35%, var(--glow-1), transparent 60%),
+        radial-gradient(700px 400px at 40% 65%, var(--glow-2), transparent 60%),
+        var(--bg-base);
       display: grid;
       place-items: center;
       text-rendering: optimizeLegibility;
     }
 
-    /* Optional subtle glow, remove if you want it flatter */
-    .wrap{
+    main{
       text-align: center;
-      padding: 24px;
       max-width: 900px;
-      width: min(900px, calc(100% - 32px));
-      filter: drop-shadow(0 0 18px rgba(255,106,26,0.10));
+      padding: 24px;
+      filter: drop-shadow(0 0 22px rgba(255,60,20,0.25));
     }
 
-    /* "No." central, not bold */
     h1{
       margin: 0 0 18px 0;
-      font-size: clamp(44px, 6vw, 72px);
-      font-weight: 400;           /* not bold */
-      letter-spacing: 0.01em;
+      font-size: clamp(48px, 6vw, 76px);
+      font-weight: 400;
+      letter-spacing: 0.015em;
     }
 
     .reason{
-      margin: 0;
-      font-size: clamp(20px, 2.2vw, 28px);
+      font-size: clamp(22px, 2.2vw, 30px);
       line-height: 1.35;
       white-space: pre-wrap;
     }
 
-    /* Small, right side, low emphasis */
     .meta{
       position: fixed;
       right: 18px;
       bottom: 14px;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       user-select: none;
+      letter-spacing: 0.04em;
     }
 
-    /* Accessibility: respect reduced motion */
     @media (prefers-reduced-motion: reduce){
-      .wrap{ filter: none; }
+      main{ filter: none; }
     }
   </style>
 </head>
 <body>
-  <main class="wrap" aria-live="polite">
+  <main aria-live="polite">
     <h1>No.</h1>
-    <p class="reason" id="reason">Loading…</p>
+    <div class="reason" id="reason">Loading…</div>
   </main>
 
   <div class="meta">Powered by No-as-a-Service</div>
 
   <script>
-    const endpoint = "https://naas.isalman.dev/no";
-
-    fetch(endpoint)
+    fetch("https://naas.isalman.dev/no")
       .then(r => r.json())
       .then(d => {
         document.getElementById("reason").textContent =
-          (d && d.reason) ? d.reason : "No.";
+          d && d.reason ? d.reason : "No.";
       })
       .catch(() => {
         document.getElementById("reason").textContent = "No.";
