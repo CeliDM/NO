@@ -19,6 +19,12 @@
       --stroke-strong: rgba(255,60,20,0.90);
       --stroke-soft: rgba(255,60,20,0.70);
       --muted: rgba(255,120,80,0.55);
+
+      /* Responsive vertical rhythm:
+         - clamps between 14px and 30px
+         - scales with viewport width in between
+      */
+      --space-1: clamp(14px, 1.2vw + 8px, 30px);
     }
 
     html, body { height: 100%; }
@@ -45,7 +51,7 @@
 
     /* "Balloon" thickness: heavier weight + stroke + layered glow */
     h1{
-      margin: 0 0 18px 0;
+      margin: 0; /* tightened: let spacing be controlled by .reason */
       font-size: clamp(45px, 5vw, 70px);
       font-weight: 600;
       letter-spacing: 0.02em;
@@ -54,14 +60,18 @@
       text-shadow:
         0 0 6px rgba(255,60,20,0.45),
         0 0 18px rgba(255,60,20,0.25),
-        0 0 22px rgba(255,60,20,0.15) ;
+        0 0 22px rgba(255,60,20,0.15);
     }
 
     .reason{
+      margin: 0 0 var(--space-1) 0; /* ✅ responsive spacing between reason and h1 */
       font-size: clamp(22px, 2.2vw, 30px);
       line-height: 1.35;
       white-space: pre-wrap;
       font-weight: 500;
+
+      /* reduces layout shift while "Loading…" is displayed */
+      min-height: 2.7em;
 
       -webkit-text-stroke: 0.55px var(--stroke-soft);
       text-shadow:
@@ -87,22 +97,25 @@
 </head>
 <body>
   <main aria-live="polite">
-    <h1>No.</h1>
     <div class="reason" id="reason">Loading…</div>
+
+    <!-- aria-hidden prevents screen readers from redundantly reading the decorative tag line -->
+    <h1 aria-hidden="true">(it's a no)</h1>
   </main>
 
   <div class="meta">Powered by No-as-a-Service</div>
 
   <script>
-    fetch("https://naas.isalman.dev/no")
-      .then(r => r.json())
-      .then(d => {
-        document.getElementById("reason").textContent =
-          d && d.reason ? d.reason : "No.";
-      })
-      .catch(() => {
-        document.getElementById("reason").textContent = "No.";
-      });
+    (async () => {
+      const el = document.getElementById("reason");
+      try {
+        const r = await fetch("https://naas.isalman.dev/no");
+        const d = await r.json();
+        el.textContent = d?.reason || "No.";
+      } catch {
+        el.textContent = "No.";
+      }
+    })();
   </script>
 </body>
 </html>
