@@ -118,4 +118,9 @@
         const d = await r.json();
         el.textContent = d?.reason || "No.";
       } catch {
-        el.te
+        el.textContent = "No.";
+      }
+    })();
+  </script>
+</body>
+</html>
