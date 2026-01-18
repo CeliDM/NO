@@ -5,17 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>No.</title>
 
-  <!-- Modern serif closer to reference site -->
+  <!-- Modern serif closer to reference site (with heavier weights for "balloon" thickness) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --bg-base: #060506;
-      --glow-1: rgba(255,60,20,0.20);
-      --glow-2: rgba(255,90,30,0.12);
-      --text: #ff3b1a;           /* reddish neon orange */
+      --glow-1: rgba(255,60,20,0.24);
+      --glow-2: rgba(255,90,30,0.16);
+      --text: #ff3b1a;                 /* reddish neon orange */
+      --stroke-strong: rgba(255,60,20,0.90);
+      --stroke-soft: rgba(255,60,20,0.70);
       --muted: rgba(255,120,80,0.55);
     }
 
@@ -41,17 +43,30 @@
       filter: drop-shadow(0 0 22px rgba(255,60,20,0.25));
     }
 
+    /* "Balloon" thickness: heavier weight + stroke + layered glow */
     h1{
       margin: 0 0 18px 0;
-      font-size: clamp(48px, 6vw, 76px);
-      font-weight: 400;
-      letter-spacing: 0.015em;
+      font-size: clamp(50px, 6vw, 78px);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+
+      -webkit-text-stroke: 0.9px var(--stroke-strong);
+      text-shadow:
+        0 0 6px rgba(255,60,20,0.45),
+        0 0 18px rgba(255,60,20,0.25),
+        0 0 42px rgba(255,60,20,0.15);
     }
 
     .reason{
       font-size: clamp(22px, 2.2vw, 30px);
       line-height: 1.35;
       white-space: pre-wrap;
+      font-weight: 500;
+
+      -webkit-text-stroke: 0.55px var(--stroke-soft);
+      text-shadow:
+        0 0 4px rgba(255,60,20,0.35),
+        0 0 14px rgba(255,60,20,0.20);
     }
 
     .meta{
@@ -66,6 +81,7 @@
 
     @media (prefers-reduced-motion: reduce){
       main{ filter: none; }
+      h1, .reason{ text-shadow: none; }
     }
   </style>
 </head>
